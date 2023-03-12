@@ -1,0 +1,14 @@
+5.1 生成新变量mutate
+mutate(data,whr2 = waist/hip*2, bmi2= weight/height*2)
+data%>%mutate(data,whr2 = waist/hip*2, bmi2= weight/height*2)  #也可以这样
+ 
+ 
+5.2 修改原变量
+transform(data, bmi = bmi/2,  waistohip = waistohip / 0.8)
+ 
+5.3 只保留新变量
+transmute(data,whr = waist/hip, bmi= weight/height)
+ 
+5.4 删除某列
+删除列
+data %>% mutate(age= NULL)
