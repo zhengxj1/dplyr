@@ -1,0 +1,20 @@
+merge()####合并
+data=merge(data1,data,by.x = 0,by.y = 0) ###直接合并
+TEXFPKMgene=merge(geneid23,GTEXFPKMneed,by.y ="id",by.x = "id") ###通过列名id和行名id合并
+
+intersect(x,y, ...) #取两个集合的交集
+sameGene=intersect( row.names(data1),col.names(data2) )##提取data1、data2相同的基因
+取data1中的sameGene行，data1 <- data1[sameGene,,drop=F]
+取data2中的sameGene行，data2 <- data2[,sameGene]
+ 
+ 
+cbind(data1,data2，data3) ##合并3个数据集
+data=cbind(data1[sameGene,],data2[sameGene,])  ##合并两个数据集共有的基因de数据
+ 
+ 
+union(x,y, ...) #取两个集合的并集，并进行去重
+union_all(x,y, ...) #取两个集合的并集，不去重
+setdiff(x,y, ...) #取两个集合的差集
+setequal(x, y, ...) #判断两个集合是否相等
+identical(colnames(x), rownames(y))#判断两个集合行名列名是否相等是否相等
+
