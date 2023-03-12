@@ -1,0 +1,17 @@
+across(.cols = everything(), .fns = NULL, ...,
+       .names = NULL)
+.cols：数据框中的变量名，默认为所有变量；
+.fns：处理函数；
+.names：处理后输出的变量名称。
+ 
+across(everything(), mean,
+                   .names = "mean_col")
+data %>%
+  group_by(cyl) %>%
+  summarise(across(everything(), mean,
+                   .names = "mean_{.col}"))
+##     cyl mean_mpg mean_disp mean_hp mean_drat mean_wt mean_qsec mean_vs mean_am
+## * <dbl>    <dbl>     <dbl>   <dbl>     <dbl>   <dbl>     <dbl>   <dbl>   <dbl>
+## 1     4     26.7      105.    82.6      4.07    2.29      19.1   0.909   0.727
+## 2     6     19.7      183.   122.       3.59    3.12      18.0   0.571   0.429
+## 3     8     15.1      353.   209.       3.23    4.00      16.8   0       0.143
