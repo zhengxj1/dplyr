@@ -1,0 +1,75 @@
+read.table("d:\\x.csv",header=TRUE,sep=",")->x
+read.table("d:\\y.csv",header=TRUE,sep=",")->y
+library(dplyr)
+inner_join(x,y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) #内连接
+left_join(x,y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) #左连接
+right_join(x,y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) #右连接
+full_join(x,y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)  #全合并
+semi_join(x,y, by = NULL, copy = FALSE, ...) #返回能够与y表匹配的x表所有记录
+anti_join(x, y, by = NULL, copy = FALSE, ...) #返回无法与y表匹配的x表的所有记录
+ 
+ 
+x <- tribble(
+  ~sample, ~ensemble,
+  1, "x1",
+  2, "x2",
+  3, "x3",
+  4, "x3",
+  5, "x5"
+)
+y <- tribble(
+  ~ensemble, ~name,
+  "x1", "y1",
+  "x2", "y2",
+  "x3", "y3",
+  "x4", "y4")
+ 
+x %>%
+  inner_join(y, by = "ensemble")
+  sample ensemble name 
+   <dbl> <chr>    <chr>
+1      1 x1       y1   
+2      2 x2       y2   
+3      3 x3       y3   
+4      4 x3       y3 
+ 
+x %>%
+  full_join(y, by = "ensemble")
+其结果是
+  sample ensemble name 
+   <dbl> <chr>    <chr>
+1      1 x1       y1   
+2      2 x2       y2   
+3      3 x3       y3   
+4      4 x3       y3   
+5      5 x5       NA   
+6     NA x4       y4   
+ 
+x %>%
+  left_join(y, by = "ensemble")
+此时的结果为
+  sample ensemble name 
+   <dbl> <chr>    <chr>
+1      1 x1       y1   
+2      2 x2       y2   
+3      3 x3       y3   
+4      4 x3       y3   
+5      5 x5       NA   当y表关键字不唯⼀时，x表的会增加记录条数
+ 
+x %>%
+  right_join(y, by = "ensemble")
+  sample ensemble name 
+   <dbl> <chr>    <chr>
+1      1 x1       y1   
+2      2 x2       y2   
+3      3 x3       y3   
+4      4 x3       y3   
+5     NA x4       y4 
+ 
+x %>%
+  merge(y, by = "ensemble")
+  ensemble sample name
+1       x1      1   y1
+2       x2      2   y2
+3       x3      3   y3
+4       x3      4   y3
