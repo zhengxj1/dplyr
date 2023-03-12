@@ -1,0 +1,4 @@
+sample_n(mtcars,2,replace=TRUE)
+sample_n(mtcars,2,weight=mpg/mean(mpg))
+sample_frac(mtcars,0.1)
+sample_frac(mtcars,0.1,weight=1/mpg)
