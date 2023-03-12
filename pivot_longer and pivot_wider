@@ -1,0 +1,8 @@
+用pivot_longer和pivot_wider进行长宽数据转换
+pivot_longer(data,
+    cols=c("variable",variable2"),
+    names_to="variable",
+    values_to ="value")
+pivot_wider(data,
+    names_from=variable,
+    values_from =value)
