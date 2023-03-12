@@ -1,0 +1,1 @@
+data%>%group_by(sex)%>%tally
