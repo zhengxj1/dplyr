@@ -1,0 +1,23 @@
+summarise(data, bmi = mean(bmi, na.rm = TRUE)) #可以新建某variable
+
+library(nycflights13)
+by_dest <- group_by(flights, dest)
+delay <- summarize(by_dest,
+count = n(), ##计数
+dist = mean(distance, na.rm = TRUE),
+delay = mean(arr_delay, na.rm = TRUE)
+)
+not_cancelled %>%
+count(tailnum, wt = distance)
+wt If NULL (the default), counts the number of rows in each group.
+If a variable, computes sum(wt) for each group.
+
+summarise_if完成一类变量的汇总
+iris %>%
+    summarise_if(is.numeric, ~ mean(., na.rm = TRUE))
+ 
+summarise_at完成指定变量的汇总
+summarise_at配合vars，可以更灵活的筛选符合条件的列，然后进行汇总
+iris %>%
+    summarise_at(vars(ends_with("Length"),Petal.Width),
+    list(~mean(.), ~median(.)))
