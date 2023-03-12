@@ -21,3 +21,10 @@ summarise_at配合vars，可以更灵活的筛选符合条件的列，然后进�
 iris %>%
     summarise_at(vars(ends_with("Length"),Petal.Width),
     list(~mean(.), ~median(.)))
+
+data %>%group_by(sex) %>%
+summarise(mean = mean(age), n = n()) #按性别分组，求age平均数
+  sex    mean     n
+  <chr> <dbl> <int>
+1 FM     35.1   432
+2 M      35.0   263
