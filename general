@@ -1,0 +1,24 @@
+library(tidyverse)
+library(data.table)
+library(stringr)
+data=fread("",header = T, sep = '\t',data.table = F)
+data=read.table("data.csv",header=TRUE,sep=",")
+
+rowname=row.names(data)
+colname=colnames(data)
+ 
+
+rownames(data)=c("a","b","c")  
+rownames(data)=data$name  
+rownames(data)=data[,1]
+colnames(data)=c(rep("a", 3))  
+colnames(data)=data[1,]
+colnames(data)[3]=c("Gene_name")
+rownames_to_column(data,"type") #行名转为列
+ 
+ncol() 
+nrow()
+ 
+group_list <- c(rep('tumor',ncol(data)),rep('normal',ncol(data)))
+
+rename(data,c("newname"=col)) ##左侧为newname，右侧为oldname
