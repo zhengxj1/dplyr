@@ -1,0 +1,2 @@
+arrange(data, desc(glu0))
+arrange(data, age, bmi)
