@@ -28,3 +28,43 @@ summarise(mean = mean(age), n = n()) #按性别分组，求age平均数
   <chr> <dbl> <int>
 1 FM     35.1   432
 2 M      35.0   263
+
+data %>%
+group_by(MHO, sex) %>%
+summarise(meanbmi =  mean(bmi,na.rm=TRUE), sdbmi = sd(bmi,na.rm=TRUE), na.rm=TRUE,n = n())
+
+data %>%
+group_by(MHO, sex) %>%
+summarise(n = n()) %>%
+group_vars()
+
+##找出每个分组中最差的成员：
+flights_sml %>%  
+group_by(year, month, day) %>%
+filter(rank(desc(arr_delay)) < 10)
+ 
+##找出大于某个阈值的所有分组：
+popular_dests <- flights %>%
+group_by(dest) %>%
+filter(n() > 365)
+ 
+##对数据进行标准化以计算分组指标：
+popular_dests %>%
+filter(arr_delay > 0) %>%
+mutate(prop_delay = arr_delay / sum(arr_delay)) %>%
+select(year:day, dest, arr_delay, prop_delay)
+如果想要取消分组，并回到未分组的数据继续操作，那么可以使用ungroup() 函数 
+
+7.6 逻辑值的计数和比例
+当与数值型函数一同使用时， TRUE 会转换为 1， FALSE 会转换为 0。
+这使得 sum() 和 mean() 非常适用于逻辑值：sum(x) 可以找出 x 中 TRUE 的数量， mean(x) 则可以找出比例
+iris %>%
+group_by(Species) %>%
+   summarise( n_pet_len = n(),
+             noNA_n_pet_len =  sum(!is.na(Petal.Length)),
+        Petal.Length_uniq_n = n_distinct(Petal.Length),
+             Petal.Length_uniq_n2 = sum(n_distinct(Petal.Length) >= 20)
+   ) 
+
+
+
