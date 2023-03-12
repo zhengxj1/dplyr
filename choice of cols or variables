@@ -1,0 +1,89 @@
+3.1 排除或选择特定的 某几列，对应名称
+select(data, sex, age, bmi)  #选取sex age bmi 三列
+select(data, -sex, -age, -bmi)  #选取sex age bmi 三列以外的列
+select(data, c(1,2,5))         ####选取第1、2、5 列
+select(data, -c(1,2,5))         ####选取第1、2、5以外的列
+select(data, sex:bmi)          #选取sex至bmi 的所有列
+ 
+msleep %>%
+   select(-(name:genus), -conservation,-(ends_with("e"))) %>% head(2)
+ 
+3.2 选择若干列
+start_col:end_col
+msleep %>%
+ select(name:vore, sleep_total:awake) %>% head(2)
+ 
+###R自带的Rcode：
+data[,c(1,2)]  ###选取第1、2列
+data[,2:ncol(data)]   ###选取第1列以外的列数
+ 
+3.3 提取/去除列名中为特定字符的列
+select(data, matches("TARGET"))    #表达式匹配，返回变量名中包含TARGET的列
+select(data, -matches("TARGET"))    #表达式匹配，返回变量名中包含TARGET的列
+#选择任何包含“a”，后跟一个或多个其他字母和“e”的列
+msleep %>%
+ select(matches("a.+e")) %>% head(2)
+ 
+###R自带的Rcode：
+test1=data[c(grep("列名",colnames(data)))]
+other=data[-c(grep("BC|FT",colnames(data)))]
+ 
+还可以用starts_with，ends_with，contains，matches，one_of，num_range和everything 含有特定字符的
+select(data, starts_with("TARGET"),starts_with("TCGA"))   #选取TARGET TCGA开头 做列名的
+select(data, -starts_with("TCGA"))   #选取TCGA开头 以外 做列名的
+ 
+select(data, ends_with("01A")) #选取变量名后缀包含01A的列
+select(data, -ends_with("01A")) #选取变量名后缀不包含01A的列
+ 
+select(data, contains("TARGET"))  #选取变量名中包含TARGET的列
+elect(data, -contains("TARGET"))  #选取变量名中不包含TARGET的列
+ 
+vars <- c("sex", "year")
+select(data, one_of(vars))   #等价于select(data, one_of(vars))
+select(data, -one_of(vars))  #除age sex之外的列
+select(data, everything())   #所有列
+select(data, age, everything()) #调整顺序，age位于所有列前面
+ 
+3.4 根据逻辑选择 #is.numeric is.integer，is.double，is.logical，is.factor。
+data%>%select_if(is.numeric)
+msleep %>%
+ select_if(is.numeric) %>%
+ select_if(~mean(., na.rm=TRUE) > 10) %>% head(2)
+ 
+注：select_all / if  函数要求将函数作为参数传递。因为mean > 10 本身不是函数，所以需要前面添加“~”表示匿名函数；或者使用funs()先将函数包装。
+more_than_10 <- function(x) {
+ mean(x,na.rm=TRUE) > 10
+}
+msleep %>% select_if(is.numeric) %>% select_if(more_than_10) %>% head(2)
+ 
+结合 n_distinct()选择具有不少于20个不同答案的列。
+msleep %>%
+ select_if(~n_distinct(.) >= 20) %>% head(2)
+ 
+3.5 select() 函数和everything() 辅助函数结合起来使用。当想要将几个变量移到数据框开头时
+select(flights, time_hour, air_time, everything())
+ 
+3.6 one_of;此外还有any_of all_of
+vars <-
+select(,one_of(vars))
+ 
+3.7 更改列名
+msleep %>%
+  select(animal = name, sleep_total) %>% head(2)
+ 
+select_all()函数允许更改所有列，并以一个函数作为参数
+msleep %>%
+  select_all(toupper) %>% head(2)
+ 
+3.8 rownames_to_column()
+此外也可以利用distinct()函数根据某列的数值对重复行进行筛选：
+distinct(select(data, sex, age, bmi))
+按照特定字符拆
+separate(ID2, into = c("Gene2", "IDnum2"),sep = "/",remove = FALSE) 
+ 
+ 
+按照第几个字符拆
+separate(Sample, into = c("Sample", "bar"),sep = 16)
+ 
+合
+unite(ID_new, ID:ID2, sep = "_") 
