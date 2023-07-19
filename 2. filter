@@ -1,0 +1,47 @@
+2.2. 根据变量variable的观测值筛选 （数值变量）
+filter(data, bmi >=27, age ==30)#  ,表示且
+filter(data, age>=40 & age<=30) #  &表示且
+filter(data, age>=40| age<=30)#  |表示或
+filter(condition1, condition2) 两个条件都符合；
+filter(condition1, !condition2) 条件1是TRUE，条件2是FALSE；
+filter(condition1 | condition2) 两个条件符合其中一个即可；
+filter(xor(condition1, condition2) 只有一个条件符合！两个都符合不可以。
+ 
+between函数选择某区间
+msleep %>% select(name, sleep_total) %>%
+ filter(between(sleep_total, 16, 18)) %>% head(2)
+ 
+2.2 根据变量variable的字符筛选  （字符变量）
+filter(data,MHO %in% c("YES","NO"))
+filter(data,!MHO %in% c("YES","NO"))
+ 
+2.3 根据行名筛选
+data[c("names",)
+ 
+2.4 filter不包含NA的
+filter(!is.na(),)
+ 
+2.4 正则表达式
+msleep %>% select(name, sleep_total) %>%
+ filter(str_detect(tolower(name), pattern = "mouse"))
+ 
+dplyr::filter(mtcars, grepl('Ferrari', type)) 筛选某一列中变量包含某字符的行
+ 
+2.5 跨多列筛选
+主要筛选函数：
+filter_all() 所有列参与筛选，根据筛选条件筛选
+filter_if() 逻辑判断确定哪些列参与筛选，根据筛选条件筛选
+filter_at()  vars()函数定义哪些列参与筛选，根据筛选条件筛选
+ 
+filter_all(any_vars(str_detect(., pattern = "Ca")))
+any_vars() 类似OR，all_vars()则类似AND 
+ 
+filter_if(is.character, any_vars(is.na(.)))
+ 
+#筛选sleep_total, sleep_rem两个变量，所有值均大于5的行
+msleep %>%
+ select(name, sleep_total:sleep_rem, brainwt:bodywt) %>%
+ filter_at(vars(sleep_total, sleep_rem), all_vars(.>5))
+msleep %>%
+ select(name, sleep_total:sleep_rem, brainwt:bodywt) %>%
+ filter_at(vars(contains("sleep")), all_vars(.>5))
